@@ -93,6 +93,26 @@ public class JdbcUserDao implements UserDao {
         return newUser;
     }
 
+    @Override
+    public BigDecimal getUserBalance(int id){
+        BigDecimal balance = 0.0;
+        String sql = "SELECT balance\n" +
+                "FROM account\n" +
+                "WHERE user_id = ?;";
+        try{
+            SqlRowSet rowSet = jdbcTemplate.queryForRowSet(sql,id);
+            if(rowSet.next()){
+                balance = row
+            }
+        }catch (CannotGetJdbcConnectionException ex){
+            throw new DaoException("Unable to connect to server or database", ex);
+        } catch (DataIntegrityViolationException ex){
+            throw new DaoException("Data integrity violation", ex);
+        }
+
+        return balance;
+    }
+
     private User mapRowToUser(SqlRowSet rs) {
         User user = new User();
         user.setId(rs.getInt("user_id"));
@@ -100,6 +120,7 @@ public class JdbcUserDao implements UserDao {
         user.setPassword(rs.getString("password_hash"));
         user.setActivated(true);
         user.setAuthorities("USER");
+        user.setBalance();
         return user;
     }
 }
