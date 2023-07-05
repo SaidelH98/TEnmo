@@ -1,5 +1,7 @@
 package com.techelevator.tenmo.controller;
 
+import com.techelevator.tenmo.dao.BalanceTransferDao;
+import com.techelevator.tenmo.dao.JdbcBalanceTransferDao;
 import com.techelevator.tenmo.dao.UserDao;
 import com.techelevator.tenmo.model.User;
 import com.techelevator.tenmo.security.jwt.TokenProvider;
@@ -15,16 +17,18 @@ import java.security.Principal;
 public class BalanceTransferController {
 
     private final UserDao userDao;
+    private final BalanceTransferDao balanceTransferDao;
 
-    public BalanceTransferController(UserDao userDao) {
+    public BalanceTransferController(UserDao userDao, BalanceTransferDao balanceTransferDao) {
         this.userDao = userDao;
+        this.balanceTransferDao = balanceTransferDao;
     }
 
     @RequestMapping(path = "/balance", method = RequestMethod.GET)
     public BigDecimal getBalance(Principal principal){
         String userName = principal.getName();
-        User user =  userDao.getUserByUsername(userName);
-        return userDao.getUserBalance(user.getId());
+        User currentUser =  userDao.getUserByUsername(userName);
+        return balanceTransferDao.getUserBalance(currentUser.getId());
     }
 
 

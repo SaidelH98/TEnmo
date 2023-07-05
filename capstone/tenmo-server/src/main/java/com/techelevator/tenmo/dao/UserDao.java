@@ -15,6 +15,4 @@ public interface UserDao {
     User getUserByUsername(String username);
 
     User createUser(RegisterUserDto user);
-
-    BigDecimal getUserBalance(int id);
 }
