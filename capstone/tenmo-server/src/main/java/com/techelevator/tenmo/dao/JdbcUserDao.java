@@ -95,14 +95,14 @@ public class JdbcUserDao implements UserDao {
 
     @Override
     public BigDecimal getUserBalance(int id){
-        BigDecimal balance = 0.0;
+        BigDecimal balance = null;
         String sql = "SELECT balance\n" +
                 "FROM account\n" +
                 "WHERE user_id = ?;";
         try{
             SqlRowSet rowSet = jdbcTemplate.queryForRowSet(sql,id);
             if(rowSet.next()){
-                balance = row
+                balance = mapRowToUser(rowSet).getBalance();
             }
         }catch (CannotGetJdbcConnectionException ex){
             throw new DaoException("Unable to connect to server or database", ex);
@@ -120,7 +120,7 @@ public class JdbcUserDao implements UserDao {
         user.setPassword(rs.getString("password_hash"));
         user.setActivated(true);
         user.setAuthorities("USER");
-        user.setBalance();
+        user.setBalance(rs.getBigDecimal("balance"));
         return user;
     }
 }
