@@ -1,13 +1,18 @@
 package com.techelevator.tenmo.services;
 
+
 import com.techelevator.tenmo.model.User;
 import com.techelevator.util.BasicLogger;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestClientResponseException;
 import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class BalanceTransferService {
     public static final String API_BASE_URL = "http://localhost:8080";
@@ -28,6 +33,19 @@ public class BalanceTransferService {
             BasicLogger.log(ex.getMessage());
         }
         return currentBalance;
+    }
+
+    public List<String> getUsernames(){
+        List<String> usernames = new ArrayList<>();
+        try {
+            String url = API_BASE_URL + "/users";
+            ResponseEntity<String[]> response = restTemplate.exchange(url, HttpMethod.GET, makeAuthEntity(), String[].class);
+            usernames = Arrays.asList(response.getBody());
+
+        } catch (RestClientResponseException | ResourceAccessException ex){
+            BasicLogger.log(ex.getMessage());
+        }
+        return usernames;
     }
 
     private HttpEntity<User> makeUserEntity(User user) {

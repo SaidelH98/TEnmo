@@ -15,4 +15,6 @@ public interface UserDao {
     User getUserByUsername(String username);
 
     User createUser(RegisterUserDto user);
+
+    List<String> getUsernames(String loggedInUser);
 }

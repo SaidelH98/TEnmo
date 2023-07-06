@@ -7,6 +7,7 @@ import com.techelevator.tenmo.services.BalanceTransferService;
 import com.techelevator.tenmo.services.ConsoleService;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 public class App {
 
@@ -105,7 +106,13 @@ public class App {
 	}
 
 	private void sendBucks() {
-        System.out.println("Please enter the ");
+        List<String> usernames = balanceTransferService.getUsernames();
+        System.out.println("Here is a list of usernames:");
+        for(String username : usernames){
+            System.out.println(username);
+        }
+        System.out.println("Please enter the username you want to transfer TE-Bucks to: ");
+
 		
 	}
 
