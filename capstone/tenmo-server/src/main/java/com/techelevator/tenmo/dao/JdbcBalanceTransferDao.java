@@ -37,4 +37,30 @@ public class JdbcBalanceTransferDao implements BalanceTransferDao {
 
         return balance;
     }
+
+    @Override
+    public void transfer(BigDecimal transferAmount, String receiverUsername, String senderUsername){
+        String sql = "BEGIN TRANSACTION;\n" +
+                "\n" +
+                "UPDATE account\n" +
+                "SET balance = balance - ?\n" +
+                "WHERE user_id = \n" +
+                "\t(SELECT user_id\n" +
+                "\t FROM tenmo_user\n" +
+                "\t WHERE username = ?);\n" +
+                "\n" +
+                "UPDATE account\n" +
+                "SET balance = balance + ?\n" +
+                "WHERE user_id = \n" +
+                "\t(SELECT user_id\n" +
+                "\t FROM tenmo_user\n" +
+                "\t WHERE username = ?);\n" +
+                "\n" +
+                "COMMIT;";
+        try{
+            jdbcTemplate.update(sql, transferAmount, senderUsername, transferAmount, receiverUsername);
+        } catch (Exception ex){
+            throw new DaoException("Unable to connect to server or database", ex);
+        }
+    }
 }
