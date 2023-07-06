@@ -59,6 +59,7 @@ public class App {
     private void handleLogin() {
         UserCredentials credentials = consoleService.promptForCredentials();
         currentUser = authenticationService.login(credentials);
+        balanceTransferService.setAuthToken(currentUser.getToken());
         if (currentUser == null) {
             consoleService.printErrorMessage();
         }
@@ -90,6 +91,7 @@ public class App {
 
 	private void viewCurrentBalance() {
         BigDecimal balance = balanceTransferService.getBalance();
+        System.out.println("Your current balance is: " + balance + "$" );
 	}
 
 	private void viewTransferHistory() {
@@ -103,7 +105,7 @@ public class App {
 	}
 
 	private void sendBucks() {
-		// TODO Auto-generated method stub
+        System.out.println("Please enter the ");
 		
 	}
 

@@ -18,7 +18,7 @@ public class BalanceTransferService {
         this.authToken = authToken;
     }
 
-    public BigDecimal getBalance(int id){
+    public BigDecimal getBalance(){
         BigDecimal currentBalance = null;
         try{
             String url = API_BASE_URL + "/balance";
