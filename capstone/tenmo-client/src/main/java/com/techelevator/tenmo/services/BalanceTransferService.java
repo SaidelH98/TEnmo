@@ -49,12 +49,12 @@ public class BalanceTransferService {
         return usernames;
     }
 
-    public void transfer(String username, BigDecimal amount){
+    public void transfer(String userToSend, BigDecimal transferAmount){
         try {
             Transfer transfer = new Transfer();
-            transfer.setAmount(amount);
-            transfer.setUsername(username);
-            restTemplate.put(API_BASE_URL + "/transfer", HttpMethod.PUT, makeTransferEntity(transfer), Void.class);
+            transfer.setAmount(transferAmount);
+            transfer.setUsername(userToSend);
+            restTemplate.exchange(API_BASE_URL + "/transfer", HttpMethod.PUT, makeTransferEntity(transfer), Void.class);
         } catch (RestClientResponseException | ResourceAccessException ex) {
             BasicLogger.log(ex.getMessage());
         }

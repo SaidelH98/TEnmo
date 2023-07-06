@@ -111,11 +111,17 @@ public class App {
         for(String username : usernames){
             System.out.println(username);
         }
-        String userToSend = consoleService.promptForString("Please enter the username you want to transfer TE-Bucks to: ");
+        String userToSend = null;
+        while (!usernames.contains(userToSend)) {
+            userToSend = consoleService.promptForString("Please enter the username you want to transfer TE-Bucks to: ");
+            if (!usernames.contains(userToSend)){
+                System.out.println("Username does not exist.");
+            }
+        }
+        viewCurrentBalance();
         BigDecimal transferAmount = consoleService.promptForBigDecimal("Please enter the amount of money to transfer: ");
-
-
-		
+        balanceTransferService.transfer(userToSend, transferAmount);
+        viewCurrentBalance();
 	}
 
 	private void requestBucks() {
