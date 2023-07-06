@@ -1,6 +1,7 @@
 package com.techelevator.tenmo.services;
 
 
+import com.techelevator.tenmo.model.Transfer;
 import com.techelevator.tenmo.model.User;
 import com.techelevator.util.BasicLogger;
 import org.springframework.core.ParameterizedTypeReference;
@@ -48,6 +49,17 @@ public class BalanceTransferService {
         return usernames;
     }
 
+    public void transfer(String username, BigDecimal amount){
+        try {
+            Transfer transfer = new Transfer();
+            transfer.setAmount(amount);
+            transfer.setUsername(username);
+            restTemplate.put(API_BASE_URL + "/transfer", HttpMethod.PUT, makeTransferEntity(transfer), Void.class);
+        } catch (RestClientResponseException | ResourceAccessException ex) {
+            BasicLogger.log(ex.getMessage());
+        }
+    }
+
     private HttpEntity<User> makeUserEntity(User user) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -59,6 +71,13 @@ public class BalanceTransferService {
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(authToken);
         return new HttpEntity<>(headers);
+    }
+
+    private HttpEntity<Transfer> makeTransferEntity(Transfer transfer){
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setBearerAuth(authToken);
+        return new HttpEntity<>(transfer, headers);
     }
 
 }

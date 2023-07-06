@@ -111,7 +111,9 @@ public class App {
         for(String username : usernames){
             System.out.println(username);
         }
-        System.out.println("Please enter the username you want to transfer TE-Bucks to: ");
+        String userToSend = consoleService.promptForString("Please enter the username you want to transfer TE-Bucks to: ");
+        BigDecimal transferAmount = consoleService.promptForBigDecimal("Please enter the amount of money to transfer: ");
+
 
 		
 	}
