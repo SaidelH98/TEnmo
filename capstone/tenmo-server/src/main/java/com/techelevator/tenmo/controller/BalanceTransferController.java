@@ -9,7 +9,9 @@ import com.techelevator.tenmo.security.jwt.TokenProvider;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
+import javax.validation.Valid;
 import java.math.BigDecimal;
 import java.security.Principal;
 import java.util.List;
@@ -39,9 +41,16 @@ public class BalanceTransferController {
 
     @RequestMapping(path = "/transfer", method = RequestMethod.PUT)
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public void transferMoney(Principal principal, @RequestBody Transfer transfer){
+    public void transferMoney(Principal principal, @RequestBody @Valid Transfer transfer){
         String senderUsername = principal.getName();
-        balanceTransferDao.transfer(transfer.getAmount(), transfer.getUsername(), senderUsername);
+        BigDecimal amountToTransfer = transfer.getAmount();
+        User currentUser = userDao.getUserByUsername(senderUsername);
+        BigDecimal userBalance = balanceTransferDao.getUserBalance(currentUser.getId());
+        if (amountToTransfer.compareTo(userBalance) == -1 || amountToTransfer.compareTo(userBalance) == 0){
+            balanceTransferDao.transfer(transfer.getAmount(), transfer.getUsername(), senderUsername);
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Insufficient funds");
+        }
     }
 
 
