@@ -5,6 +5,7 @@ import com.techelevator.tenmo.model.UserCredentials;
 import com.techelevator.tenmo.services.AuthenticationService;
 import com.techelevator.tenmo.services.BalanceTransferService;
 import com.techelevator.tenmo.services.ConsoleService;
+import com.techelevator.tenmo.services.TransferHistoryService;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -18,6 +19,8 @@ public class App {
 
     private AuthenticatedUser currentUser;
     private final BalanceTransferService balanceTransferService = new BalanceTransferService();
+
+    private final TransferHistoryService transferHistoryService = new TransferHistoryService();
 
     public static void main(String[] args) {
         App app = new App();
@@ -96,8 +99,11 @@ public class App {
 	}
 
 	private void viewTransferHistory() {
-		// TODO Auto-generated method stub
-		
+        System.out.println("-------------------------------------------------------");
+        System.out.println("Transfers ID          From/To                 Amount");
+        System.out.println("-------------------------------------------------------");
+        for()
+
 	}
 
 	private void viewPendingRequests() {

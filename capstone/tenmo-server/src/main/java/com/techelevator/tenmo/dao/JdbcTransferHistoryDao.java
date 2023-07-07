@@ -19,21 +19,6 @@ public class JdbcTransferHistoryDao implements TransferHistoryDao {
     public JdbcTransferHistoryDao(JdbcTemplate jdbcTemplate){
         this.jdbcTemplate = jdbcTemplate;
     }
-    public String usernameByAccountId(int id){
-        String username = null;
-        String sql2 = "SELECT username\n" +
-                "FROM tenmo_user tu\n" +
-                "JOIN account a\n" +
-                "ON tu.user_id = a.user_id\n" +
-                "WHERE account_id = ?;";
-        try {
-            SqlRowSet result = jdbcTemplate.queryForRowSet(sql2,id);
-            username = result.getString("username");
-        } catch (Exception ex){
-            throw new DaoException("Unable to connect to server or database",ex);
-        }
-        return username;
-    }
 
     @Override
     public List<TransferHistory> viewTransfers(String loggedUsername){
@@ -64,7 +49,7 @@ public class JdbcTransferHistoryDao implements TransferHistoryDao {
         }
         return pastTransfers;
     }
-
+    //to be completed and used for the viewTransferDetailed
   /* private TransferHistory mapRowToTransferHistory(SqlRowSet rs) {
         TransferHistory transferHistory = new TransferHistory();
         transferHistory.setTransferId(rs.getInt("transfer_id"));

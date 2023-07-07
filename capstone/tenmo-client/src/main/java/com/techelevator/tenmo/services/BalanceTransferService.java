@@ -16,7 +16,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class BalanceTransferService {
-    public static final String API_BASE_URL = "http://localhost:8080";
+    private static final String API_BASE_URL = "http://localhost:8080";
     private RestTemplate restTemplate = new RestTemplate();
     private String authToken = null;
 
