@@ -1,6 +1,7 @@
 package com.techelevator.tenmo;
 
 import com.techelevator.tenmo.model.AuthenticatedUser;
+import com.techelevator.tenmo.model.TransferHistory;
 import com.techelevator.tenmo.model.UserCredentials;
 import com.techelevator.tenmo.services.AuthenticationService;
 import com.techelevator.tenmo.services.BalanceTransferService;
@@ -64,6 +65,7 @@ public class App {
         UserCredentials credentials = consoleService.promptForCredentials();
         currentUser = authenticationService.login(credentials);
         balanceTransferService.setAuthToken(currentUser.getToken());
+        transferHistoryService.setAuthToken(currentUser.getToken());
         if (currentUser == null) {
             consoleService.printErrorMessage();
         }
@@ -99,11 +101,13 @@ public class App {
 	}
 
 	private void viewTransferHistory() {
+        List<TransferHistory> transferHistories = transferHistoryService.viewTransfers();
         System.out.println("-------------------------------------------------------");
-        System.out.println("Transfers ID          From/To                 Amount");
+        System.out.println("ID          From          To                 Amount");
         System.out.println("-------------------------------------------------------");
-        for()
-
+        for(TransferHistory th : transferHistories){
+            System.out.println(th.toString());
+        }
 	}
 
 	private void viewPendingRequests() {

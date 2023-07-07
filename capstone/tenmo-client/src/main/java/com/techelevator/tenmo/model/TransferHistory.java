@@ -48,4 +48,9 @@ public class TransferHistory {
     public void setTransferAmount(BigDecimal transferAmount) {
         this.transferAmount = transferAmount;
     }
+
+    @Override
+    public String toString(){
+        return this.getTransferId() + "        " + this.getSenderUsername() + "        " + this.getReceiverUsername() + "        " + this.getTransferAmount();
+    }
 }

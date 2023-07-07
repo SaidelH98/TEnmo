@@ -1,14 +1,14 @@
 package com.techelevator.tenmo.services;
 
+import com.techelevator.tenmo.model.Transfer;
 import com.techelevator.tenmo.model.TransferHistory;
 import com.techelevator.util.BasicLogger;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
+import org.springframework.http.*;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestClientResponseException;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -22,9 +22,10 @@ public class TransferHistoryService {
     }
 
     public List<TransferHistory> viewTransfers(){
-        List<TransferHistory> transferHistories = null;
+        List<TransferHistory> transferHistories = new ArrayList<>();
         try {
-            return Arrays.asList(restTemplate.exchange(API_BASE_URL, HttpMethod.GET, makeAuthEntity(), TransferHistory[].class).getBody());
+            ResponseEntity<TransferHistory[]> response = restTemplate.exchange(API_BASE_URL, HttpMethod.GET, makeAuthEntity(), TransferHistory[].class);
+            transferHistories = Arrays.asList(response.getBody());
         } catch (RestClientResponseException | ResourceAccessException ex) {
             BasicLogger.log(ex.getMessage());
         }
@@ -35,5 +36,12 @@ public class TransferHistoryService {
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(authToken);
         return new HttpEntity<>(headers);
+    }
+
+    private HttpEntity<TransferHistory> makeTransferHistoryEntity(TransferHistory transferHistory){
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setBearerAuth(authToken);
+        return new HttpEntity<>(transferHistory, headers);
     }
 }
