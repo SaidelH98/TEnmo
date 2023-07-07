@@ -49,14 +49,44 @@ public class JdbcTransferHistoryDao implements TransferHistoryDao {
         }
         return pastTransfers;
     }
-    //to be completed and used for the viewTransferDetailed
-  /* private TransferHistory mapRowToTransferHistory(SqlRowSet rs) {
+
+    @Override
+    public TransferHistory getTransferHistoryById(int id){
+        TransferHistory selectedTransfer = new TransferHistory();
+        String sql = "SELECT transfer_id,\n" +
+                "transfer_type_id, \n" +
+                "transfer_status_id, \n" +
+                "(SELECT username AS senderusername \n" +
+                "FROM tenmo_user tu\n" +
+                "JOIN account a\n" +
+                "ON tu.user_id = a.user_id\n" +
+                "WHERE account_id = account_from), \n" +
+                "(SELECT username AS receiverusername\n" +
+                "FROM tenmo_user tu\n" +
+                "JOIN account a\n" +
+                "ON tu.user_id = a.user_id\n" +
+                "WHERE account_id = account_to), \n" +
+                "amount\n" +
+                "FROM transfer\n" +
+                "WHERE transfer_id = ?;";
+        try {
+            SqlRowSet result = jdbcTemplate.queryForRowSet(sql, id);
+            if (result.next()){
+                selectedTransfer = mapRowToTransferHistory(result);
+            }
+        } catch (Exception ex){
+            throw new DaoException("Unable to connect to server or database", ex);
+        }
+        return selectedTransfer;
+    }
+
+   private TransferHistory mapRowToTransferHistory(SqlRowSet rs) {
         TransferHistory transferHistory = new TransferHistory();
         transferHistory.setTransferId(rs.getInt("transfer_id"));
-        //Lookup username by accountId
-        transferHistory.setSenderUsername(rs.getInt("account_from"));
-        transferHistory.setReceiverUsername(rs.getString());
+        transferHistory.setTransferStatusId(rs.getInt("transfer_status_id"));
+        transferHistory.setSenderUsername(rs.getString("senderusername"));
+        transferHistory.setReceiverUsername(rs.getString("receiverusername"));
         transferHistory.setTransferAmount(rs.getBigDecimal("amount"));
         return transferHistory;
-    }*/
+    }
 }

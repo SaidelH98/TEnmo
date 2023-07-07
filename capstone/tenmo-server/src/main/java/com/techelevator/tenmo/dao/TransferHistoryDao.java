@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface TransferHistoryDao {
     List<TransferHistory> viewTransfers(String loggedUsername);
+    TransferHistory getTransferHistoryById(int id);
 }
