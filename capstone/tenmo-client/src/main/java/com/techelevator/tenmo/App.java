@@ -108,6 +108,16 @@ public class App {
         for(TransferHistory th : transferHistories){
             System.out.println(th.toString());
         }
+        while(true){
+            int ans = consoleService.promptForInt("To view details of a certain transfer, enter the transfer ID, to Exit press 0.");
+            if (ans != 0){
+                TransferHistory specificTransfer = transferHistoryService.viewTransferById(ans);
+                System.out.println(specificTransfer.specificToString());
+            }
+            else {
+                break;
+            }
+        }
 	}
 
 	private void viewPendingRequests() {

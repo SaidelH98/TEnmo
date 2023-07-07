@@ -32,6 +32,17 @@ public class TransferHistoryService {
         return transferHistories;
     }
 
+    public TransferHistory viewTransferById(int id){
+        TransferHistory transferHistory = new TransferHistory();
+        try {
+            ResponseEntity<TransferHistory> response = restTemplate.exchange(API_BASE_URL + "/" + id, HttpMethod.GET, makeAuthEntity(), TransferHistory.class);
+            transferHistory = response.getBody();
+        } catch (RestClientResponseException | ResourceAccessException ex) {
+            BasicLogger.log(ex.getMessage());
+        }
+        return transferHistory;
+    }
+
     private HttpEntity<Void> makeAuthEntity() {
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(authToken);

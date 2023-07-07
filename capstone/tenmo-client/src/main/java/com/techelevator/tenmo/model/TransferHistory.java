@@ -53,4 +53,25 @@ public class TransferHistory {
     public String toString(){
         return this.getTransferId() + "        " + this.getSenderUsername() + "        " + this.getReceiverUsername() + "        " + this.getTransferAmount();
     }
+
+    public String specificToString(){
+        if (this.getTransferStatusId() == 1){
+            return "Id: " + this.getTransferId() + "\n" +
+                    "From: " + this.getSenderUsername() + "\n" +
+                    "To: " + this.getReceiverUsername() + "\n" +
+                    "Status: Pending" + "\n" +
+                    "Amount: " + this.getTransferAmount();
+        } else if (this.getTransferStatusId() == 3){
+            return "Id: " + this.getTransferId() + "\n" +
+                    "From: " + this.getSenderUsername() + "\n" +
+                    "To: " + this.getReceiverUsername() + "\n" +
+                    "Status: Rejected" + "\n" +
+                    "Amount: " + this.getTransferAmount();
+        }
+        return "Id: " + this.getTransferId() + "\n" +
+                "From: " + this.getSenderUsername() + "\n" +
+                "To: " + this.getReceiverUsername() + "\n" +
+                "Status: Approved" + "\n" +
+                "Amount: " + this.getTransferAmount();
+    }
 }
