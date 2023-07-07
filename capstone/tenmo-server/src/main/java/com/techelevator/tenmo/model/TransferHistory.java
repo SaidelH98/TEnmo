@@ -9,7 +9,6 @@ public class TransferHistory {
     private String senderUsername;
     private String receiverUsername;
     private BigDecimal transferAmount;
-
     public int getTransferId() {
         return transferId;
     }
