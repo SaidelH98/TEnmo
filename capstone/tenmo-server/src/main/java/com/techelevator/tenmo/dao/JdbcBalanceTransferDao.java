@@ -55,10 +55,27 @@ public class JdbcBalanceTransferDao implements BalanceTransferDao {
                 "\t(SELECT user_id\n" +
                 "\t FROM tenmo_user\n" +
                 "\t WHERE username = ?);\n" +
+                "\t \n" +
+                "INSERT INTO transfer(transfer_type_id, transfer_status_id, account_from, account_to, amount)\n" +
+                "VALUES(2, \n" +
+                "\t   2, \n" +
+                "\t   (SELECT account_id\n" +
+                "\t FROM account\n" +
+                "\t WHERE user_id = \n" +
+                "\t\t(SELECT user_id\n" +
+                "\t\tFROM tenmo_user\n" +
+                "\t\tWHERE username = ?)), \n" +
+                "\t   (SELECT account_id\n" +
+                "\t FROM account\n" +
+                "\t WHERE user_id = \n" +
+                "\t\t(SELECT user_id\n" +
+                "\t\tFROM tenmo_user\n" +
+                "\t\tWHERE username = ?)), \n" +
+                "\t   ?);\n" +
                 "\n" +
                 "COMMIT;";
         try{
-            jdbcTemplate.update(sql, transferAmount, senderUsername, transferAmount, receiverUsername);
+            jdbcTemplate.update(sql, transferAmount, senderUsername, transferAmount, receiverUsername, senderUsername, receiverUsername, transferAmount);
         } catch (Exception ex){
             throw new DaoException("Unable to connect to server or database", ex);
         }
