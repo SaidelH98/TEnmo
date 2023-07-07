@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 public class TransferHistory {
 
     private int transferId;
-    private int transferStatusId;
+    private int transferStatusId = 2;
     private String senderUsername;
     private String receiverUsername;
     private BigDecimal transferAmount;

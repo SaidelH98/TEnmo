@@ -37,18 +37,26 @@ public class JdbcTransferHistoryDao implements TransferHistoryDao {
 
     @Override
     public List<TransferHistory> viewTransfers(String loggedUsername){
-        TransferHistory transferHistory = new TransferHistory();
         List<TransferHistory> pastTransfers = new ArrayList<>();
-        String sql = "SELECT transfer_id, account_from, account_to, amount\n" +
+        String sql = "SELECT transfer_id, (SELECT username AS senderusername\n" +
+                "FROM tenmo_user tu\n" +
+                "JOIN account a\n" +
+                "ON tu.user_id = a.user_id\n" +
+                "WHERE account_id = account_from), (SELECT username AS receiverusername\n" +
+                "FROM tenmo_user tu\n" +
+                "JOIN account a\n" +
+                "ON tu.user_id = a.user_id\n" +
+                "WHERE account_id = account_to), amount\n" +
                 "FROM transfer\n" +
                 "WHERE account_from = (SELECT account_id FROM account WHERE user_id = (SELECT user_id FROM tenmo_user WHERE username = ?));";
         try {
             SqlRowSet result = jdbcTemplate.queryForRowSet(sql, loggedUsername);
             while(result.next()){
+                TransferHistory transferHistory = new TransferHistory();
                 transferHistory.setTransferAmount(result.getBigDecimal("amount"));
                 transferHistory.setTransferId(result.getInt("transfer_id"));
-                transferHistory.setSenderUsername(usernameByAccountId(result.getInt("account_from")));
-                transferHistory.setReceiverUsername(usernameByAccountId(result.getInt("account_to")));
+                transferHistory.setSenderUsername(result.getString("senderusername"));
+                transferHistory.setReceiverUsername(result.getString("receiverusername"));
                 pastTransfers.add(transferHistory);
             }
         }catch (Exception ex){
